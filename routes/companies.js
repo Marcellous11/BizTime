@@ -26,7 +26,7 @@ router.post('/', async (req, res, next) => {
 			name,
 			description
 		]);
-		return res.json(results.rows);
+		return res.status(201).json(results.rows);
 	} catch (e) {
 		next(e);
 	}
