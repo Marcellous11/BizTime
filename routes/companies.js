@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db');
+const ExpressError = require('../expressError');
 
 router.get('/', async (req, res, next) => {
 	try {
@@ -45,8 +46,16 @@ router.put('/:code', async (req, res, next) => {
 
 router.delete('/:code', async (req, res, next) => {
 	try {
-		const result = await db.query('DELETE FROM companies WHERE code=$1', [ req.params.code ]);
-		return res.json({ mes: 'Deleted' });
+		const codes = await db.query('SELECT code FROM companies');
+		const { code } = req.params;
+		const codeList = codes.rows.map((c) => Object.values(c));
+
+		if (!codeList.flatMap((c) => c).includes(code)) {
+			throw new ExpressError("That code doesn't exist", 404);
+		}
+		const result = await db.query('DELETE FROM companies WHERE code=$1', [ code ]);
+
+		return res.json({ msg: 'Deleted' });
 	} catch (e) {
 		return next(e);
 	}
