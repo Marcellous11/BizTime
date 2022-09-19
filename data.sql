@@ -12,6 +12,16 @@ CREATE TABLE companies (
     name text NOT NULL UNIQUE,
     description text
 );
+CREATE TABLE industries (
+    id serial PRIMARY KEY,
+    name text NOT NULL UNIQUE,
+);
+
+CREATE TABLE company_industries (
+    id serial PRIMARY KEY,
+    company text NOT NULL PRIMARY KEY REFERENCES companies ON DELETE CASCADE,
+    industries text NOT NULL PRIMARY KEY REFERENCES industries ON DELETE CASCADE,
+);
 
 CREATE TABLE invoices (
     id serial PRIMARY KEY,
