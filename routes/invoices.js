@@ -40,6 +40,7 @@ router.put('/:id', async (req, res, next) => {
 			'UPDATE invoices SET comp_Code=$1, amt=$2, paid=$3, paid_date=$4 WHERE id=$5 RETURNING * ',
 			[ req.body.comp_Code, req.body.amt, req.body.paid, req.body.paid_date, req.params.id ]
 		);
+
 		return res.json({ invocies: result.rows[0] });
 	} catch (e) {
 		return next(e);
